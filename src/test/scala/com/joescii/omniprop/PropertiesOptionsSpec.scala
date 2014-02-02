@@ -1,22 +1,21 @@
 package com.joescii.omniprop
 
-import org.scalatest._
-import org.scalatest.matchers._
+import org.scalacheck.Properties
+import org.scalacheck.Prop.forAll
 
-object PropertiesOptionsSpec {
+object PropertiesOptionsSpec extends Properties("PropertiesOption") {
   object test extends StringProperty
-}
 
-class PropertiesOptionsSpec extends WordSpec with ShouldMatchers{
-  "The PropertiesOption object" should {
-    "return None for an undefined property value" in {
-      PropertiesOptions.get("something not defined") should be (None)
-    }
+  property("get(undefined value) == None") = forAll { k:String =>
+    PropertiesOptions.get(test.key+"."+k) == None
+  }
 
-    """return Some("value") for our defined test property""" in {
-      import PropertiesOptionsSpec.test
-      System.setProperty(test.key, "value")
-      PropertiesOptions.get(test.key) should be (Some("value"))
-    }
+  property("""get(defined value) == Some("value")""") = forAll { (k:String, v:String) =>
+    val key = test.key+"."+k
+    System.setProperty(key, v)
+    val value = PropertiesOptions.get(key)
+    System.clearProperty(key)
+
+    Some(v) == value
   }
 }
