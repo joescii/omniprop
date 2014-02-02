@@ -8,7 +8,9 @@ scalaVersion := "2.9.1"
 
 crossScalaVersions := Seq("2.10.3", "2.9.2", "2.9.1-1", "2.9.1")
 
-libraryDependencies ++= Seq()
+libraryDependencies ++= {
+  Seq("org.scalatest" %% "scalatest" % "1.9.1" % "test")
+}
 
 scalacOptions <<= scalaVersion map { v: String =>
   val opts = "-deprecation" :: "-unchecked" :: Nil
