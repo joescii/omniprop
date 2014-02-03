@@ -25,6 +25,11 @@ package object omniprop {
     lazy val get = PropertiesExceptions.getInt(key)
   }
 
+  /** Extend this trait for a FiniteDuration-typed property */
+  trait FiniteDurationProperty extends Property[FiniteDuration] {
+    lazy val get = PropertiesExceptions.getFiniteDuration(key)
+  }
+
   /** Optionally gets properties by name from the configured stack of PropertyProviders */
   object PropertiesOptions {
     private def toOption[T](getter: => T) = try {
@@ -38,6 +43,9 @@ package object omniprop {
 
     /** Gets a property and converts the value to an integer */
     def getInt(key:String):Option[Int] = toOption(PropertiesExceptions.getInt(key))
+
+    /** Gets a property and converts the value into a FiniteDuration object */
+    def getFiniteDuration(key:String):Option[FiniteDuration] = toOption(PropertiesExceptions.getFiniteDuration(key))
   }
 
   /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
@@ -48,6 +56,7 @@ package object omniprop {
     // TODO: Make this configurable, perhaps utilizing a Promise to allow it to be settable (once) and immutable
     private val providers:List[PropertyProvider] = List(Sys)
 
+    /** Gets the property value from the stack of PropertyProviders */
     def get(key:String):String =
     // TODO: Map over the providers to resolve the property
       providers.head.get(key) match {
@@ -55,6 +64,7 @@ package object omniprop {
         case _ => throw UnresolvedPropertyException(key)
       }
 
+    /** Gets a property and converts the value to an integer */
     def getInt(key:String):Int = {
       val v = get(key)
       try {
@@ -64,6 +74,7 @@ package object omniprop {
       }
     }
 
+    /** Gets a property and converts the value into a FiniteDuration object */
     def getFiniteDuration(key:String):FiniteDuration = {
       val v = get(key)
       try {
@@ -81,5 +92,6 @@ package object omniprop {
   case class WrongValueTypeException(key:String, value:String) extends Exception(key+" == '"+value+"'")
 
   implicit def ConvertString(p:StringProperty):String = p.get
-  implicit def ConvertInt   (p:IntProperty)   :Int    = p.get
+  implicit def ConvertInt(p:IntProperty):Int = p.get
+  implicit def ConvertFiniteDuration(p:FiniteDurationProperty):FiniteDuration = p.get
 }

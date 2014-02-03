@@ -9,12 +9,14 @@ package object test {
 object Test {
   object string extends StringProperty
   object int extends IntProperty
+  object finiteDuration extends FiniteDurationProperty
 }
 
 class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
   override def afterAll = {
     System.clearProperty(Test.string.key)
     System.clearProperty(Test.int.key)
+    System.clearProperty(Test.finiteDuration.key)
   }
 
   "A property defined in a package object" should { "have the correct key" in {
@@ -25,7 +27,7 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfte
     Test.string.key should equal ("com.joescii.omniprop.Test.string")
   }}
 
-  "StringProperty.get" should {
+  "StringProperty" should {
     "except for undefined properties" in {
       intercept[UnresolvedPropertyException](Test.string.get)
     }
@@ -37,7 +39,7 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfte
     }
   }
 
-  "IntProperty.get" should {
+  "IntProperty" should {
     "except for undefined properties" in {
       intercept[UnresolvedPropertyException](Test.int.get)
     }
@@ -51,6 +53,25 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfte
       System.setProperty(Test.int.key, "42")
       val v:Int = Test.int
       v should equal (42)
+    }
+  }
+
+  "FiniteDurationProperty" should {
+    import scala.concurrent.duration._
+
+    "except for undefined properties" in {
+      intercept[UnresolvedPropertyException](Test.finiteDuration.get)
+    }
+
+    "except for non-duration properties" in {
+      System.setProperty(Test.finiteDuration.key, "garbage")
+      intercept[WrongValueTypeException](Test.finiteDuration.get)
+    }
+
+    "implicitly convert to a FiniteDuration and equal the defined value" in {
+      System.setProperty(Test.finiteDuration.key, "5 seconds")
+      val v:FiniteDuration = Test.finiteDuration
+      v should equal(5.seconds)
     }
   }
 }
