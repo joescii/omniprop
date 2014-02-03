@@ -1,8 +1,8 @@
 package com.joescii
 
-/**
-  * Import this package where you want to do property stuff.
-  */
+import scala.concurrent.duration.FiniteDuration
+
+/** Import this package where you want to do property stuff. */
 package object omniprop {
   /** Base property trait */
   trait Property[T] {
@@ -61,6 +61,16 @@ package object omniprop {
         Integer.parseInt(v)
       } catch {
         case _:NumberFormatException => throw WrongValueTypeException(key, v)
+      }
+    }
+
+    def getFiniteDuration(key:String):FiniteDuration = {
+      val v = get(key)
+      try {
+        val split = v.split("""\s+""")
+        FiniteDuration(java.lang.Long.parseLong(split(0)), split(1))
+      } catch {
+        case _:Exception => throw WrongValueTypeException(key, v)
       }
     }
   }
