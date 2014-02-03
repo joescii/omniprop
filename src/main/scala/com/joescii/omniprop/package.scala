@@ -25,15 +25,25 @@ package object omniprop {
     import omniprop.providers.{ PropertyProvider, System => Sys }
 
     /** The stack of PropertyProviders to use for resolving property values.  */
-    // TODO: Make this configurable.
+    // TODO: Make this configurable, perhaps utilizing a Promise to allow it to be settable (once) and immutable
     private val providers:List[PropertyProvider] = List(Sys)
 
-    /** Gets the properties from the stack of PropertyProviders */
+    /** Gets the property value from the stack of PropertyProviders */
     def get(key:String):Option[String] =
       // TODO: Map over the providers to resolve the property
       providers.head.get(key)
+
+    /** Gets a property and converts the value to an integer */
+    def getInt(key:String):Option[Int] = get(key).flatMap { v =>
+      try {
+        Some(Integer.parseInt(v))
+      } catch {
+        case _:NumberFormatException => None
+      }
+    }
   }
 
+  /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
   object PropertiesExceptions {
     // TODO
   }
