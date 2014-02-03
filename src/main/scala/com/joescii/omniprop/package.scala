@@ -45,6 +45,14 @@ package object omniprop {
 
   /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
   object PropertiesExceptions {
-    // TODO
+    private def toException[T](getter: String => Option[T], key: String) = getter(key) match {
+      case Some(v) => v
+      case _ => throw new UnresolvedProperty(key)
+    }
+
+    def get(key:String):String = toException(PropertiesOptions.get, key)
+    def getInt(key:String):Int = toException(PropertiesOptions.getInt, key)
   }
+
+  case class UnresolvedProperty(key:String) extends Exception(key)
 }
