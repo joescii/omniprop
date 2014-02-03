@@ -3,7 +3,7 @@ package com.joescii.omniprop
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-object PropertiesOptionsSpec extends Properties("PropertiesOption") {
+object PropertiesOptionsChecks extends Properties("PropertiesOption") {
   object test extends StringProperty
 
   def undef(k:String) = test.key+"."+k
