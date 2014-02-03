@@ -17,7 +17,12 @@ package object omniprop {
 
   /** Extend this trait for a String-typed property */
   trait StringProperty extends Property[String] {
-    lazy val get = ""
+    lazy val get = PropertiesExceptions.get(key)
+  }
+
+  /** Extend this trait for an Int-typed property */
+  trait IntProperty extends Property[Int] {
+    lazy val get = PropertiesExceptions.getInt(key)
   }
 
   /** Optionally gets properties by name from the configured stack of PropertyProviders */
@@ -47,12 +52,16 @@ package object omniprop {
   object PropertiesExceptions {
     private def toException[T](getter: String => Option[T], key: String) = getter(key) match {
       case Some(v) => v
-      case _ => throw new UnresolvedProperty(key)
+      case _ => throw new UnresolvedPropertyException(key)
     }
 
     def get(key:String):String = toException(PropertiesOptions.get, key)
     def getInt(key:String):Int = toException(PropertiesOptions.getInt, key)
   }
 
-  case class UnresolvedProperty(key:String) extends Exception(key)
+  case class UnresolvedPropertyException(key:String) extends Exception(key)
+  case class WrongValueTypeException(key:String, value:String) extends Exception(key+" == '"+value+"'")
+
+  implicit def ConvertString(p:StringProperty):String = p.get
+  implicit def ConvertInt   (p:IntProperty)   :Int    = p.get
 }
