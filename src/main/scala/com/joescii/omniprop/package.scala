@@ -1,7 +1,7 @@
 package com.joescii
 
 /**
-  *
+  * Import this package where you want to do property stuff.
   */
 package object omniprop {
   /** Base property trait */
@@ -65,7 +65,9 @@ package object omniprop {
     }
   }
 
+  /** Thrown when the requested property could not be resolved in the current configuration */
   case class UnresolvedPropertyException(key:String) extends Exception(key)
+  /** Thrown when the requested property had a defined value which could not be converted to the expected type */
   case class WrongValueTypeException(key:String, value:String) extends Exception(key+" == '"+value+"'")
 
   implicit def ConvertString(p:StringProperty):String = p.get
