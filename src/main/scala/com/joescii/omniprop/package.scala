@@ -27,36 +27,42 @@ package object omniprop {
 
   /** Optionally gets properties by name from the configured stack of PropertyProviders */
   object PropertiesOptions {
+    private def toOption[T](getter: => T) = try {
+      Some(getter)
+    } catch {
+      case _:Exception => None
+    }
+
+    /** Gets the property value from the stack of PropertyProviders */
+    def get(key:String):Option[String] = toOption(PropertiesExceptions.get(key))
+
+    /** Gets a property and converts the value to an integer */
+    def getInt(key:String):Option[Int] = toOption(PropertiesExceptions.getInt(key))
+  }
+
+  /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
+  object PropertiesExceptions {
     import omniprop.providers.{ PropertyProvider, System => Sys }
 
     /** The stack of PropertyProviders to use for resolving property values.  */
     // TODO: Make this configurable, perhaps utilizing a Promise to allow it to be settable (once) and immutable
     private val providers:List[PropertyProvider] = List(Sys)
 
-    /** Gets the property value from the stack of PropertyProviders */
-    def get(key:String):Option[String] =
-      // TODO: Map over the providers to resolve the property
-      providers.head.get(key)
+    def get(key:String):String =
+    // TODO: Map over the providers to resolve the property
+      providers.head.get(key) match {
+        case Some(v) => v
+        case _ => throw UnresolvedPropertyException(key)
+      }
 
-    /** Gets a property and converts the value to an integer */
-    def getInt(key:String):Option[Int] = get(key).flatMap { v =>
+    def getInt(key:String):Int = {
+      val v = get(key)
       try {
-        Some(Integer.parseInt(v))
+        Integer.parseInt(v)
       } catch {
-        case _:NumberFormatException => None
+        case _:NumberFormatException => throw WrongValueTypeException(key, v)
       }
     }
-  }
-
-  /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
-  object PropertiesExceptions {
-    private def toException[T](getter: String => Option[T], key: String) = getter(key) match {
-      case Some(v) => v
-      case _ => throw new UnresolvedPropertyException(key)
-    }
-
-    def get(key:String):String = toException(PropertiesOptions.get, key)
-    def getInt(key:String):Int = toException(PropertiesOptions.getInt, key)
   }
 
   case class UnresolvedPropertyException(key:String) extends Exception(key)

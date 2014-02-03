@@ -21,28 +21,5 @@ object PropertiesOptionsChecks extends Properties("PropertiesOption") {
     Some(v) == value
   }
 
-  property("getInt(undefined value) == None") = forAll { k:String =>
-    PropertiesOptions.getInt(undef(k)) == None
-  }
-
-  property("getInt(defined value) == Some(integer)") = forAll { (k:String, v:Int) =>
-    val key = undef(k)
-    System.setProperty(key, v.toString)
-    val value = PropertiesOptions.getInt(key)
-    System.clearProperty(key)
-
-    Some(v) == value
-  }
-
-  property("getInt(non-int value) == Some(integer)") = forAll { (k:String, v:String) =>
-    val key = undef(k)
-    System.setProperty(key, v)
-    val value = PropertiesOptions.getInt(key)
-    System.clearProperty(key)
-
-    """^\d+?$""".r.findFirstIn(v) match {
-      case Some(num) => true // v happens to be an integer, and we're not testing that case here.
-      case _ => value == None
-    }
-  }
+  // This should be sufficient.  Any extra testing is just retesting otherwise tested code
 }

@@ -40,7 +40,7 @@ object PropertiesExceptionsChecks extends Properties("PropertiesExceptions") {
 
     val check:Boolean = """^\d+?$""".r.findFirstIn(v) match {
       case Some(num) => true // v happens to be an integer, and we're not testing that case here.
-      case _ => throws(classOf[UnresolvedPropertyException])(PropertiesExceptions.getInt(key))
+      case _ => throws(classOf[WrongValueTypeException])(PropertiesExceptions.getInt(key))
     }
 
     System.clearProperty(key)

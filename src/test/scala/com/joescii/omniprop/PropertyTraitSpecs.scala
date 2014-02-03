@@ -11,7 +11,12 @@ object Test {
   object int extends IntProperty
 }
 
-class PropertyTraitSpecs extends WordSpec with ShouldMatchers {
+class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
+  override def afterAll = {
+    System.clearProperty(Test.string.key)
+    System.clearProperty(Test.int.key)
+  }
+
   "A property defined in a package object" should { "have the correct key" in {
     test.property.key should equal ("com.joescii.omniprop.test.property")
   }}
@@ -28,20 +33,23 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers {
     "implicitly convert to a String and equal the defined value" in {
       System.setProperty(Test.string.key, "value")
       val v:String = Test.string
-      System.clearProperty(Test.string.key)
       v should equal ("value")
     }
   }
 
   "IntProperty.get" should {
-    "except for undefined properpties" in {
+    "except for undefined properties" in {
       intercept[UnresolvedPropertyException](Test.int.get)
+    }
+
+    "except for non-int properties" in {
+      System.setProperty(Test.int.key, "garbage")
+      intercept[WrongValueTypeException](Test.int.get)
     }
 
     "implicitly convert to an Int and equal the defined value" in {
       System.setProperty(Test.int.key, "42")
       val v:Int = Test.int
-      System.clearProperty(Test.int.key)
       v should equal (42)
     }
   }
