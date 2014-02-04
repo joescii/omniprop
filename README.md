@@ -42,7 +42,7 @@ Usage
 To use the **omniprop** DSL in your Scala application, you will need to do the following:
 
 1. Import `com.joescii.omniprop._`
-2. Define an `object` which extends the appropriately-typed sub trait of `Property[T]`
+2. Define an `object` which extends the appropriately-typed sub class of `Property[T]`
 3. On the property object, either explicitly call `get` or implicitly convert to the value type
 
 Examples
