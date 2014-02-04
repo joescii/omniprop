@@ -15,18 +15,18 @@ package object omniprop {
     def get:T
   }
 
-  /** Extend this trait for a String-typed property */
-  trait StringProperty extends Property[String] {
+  /** Extend this class for a String-typed property */
+  abstract class StringProperty extends Property[String] {
     lazy val get = PropertiesExceptions.get(key)
   }
 
-  /** Extend this trait for an Int-typed property */
-  trait IntProperty extends Property[Int] {
+  /** Extend this class for an Int-typed property */
+  abstract class IntProperty extends Property[Int] {
     lazy val get = PropertiesExceptions.getInt(key)
   }
 
-  /** Extend this trait for a FiniteDuration-typed property */
-  trait FiniteDurationProperty extends Property[FiniteDuration] {
+  /** Extend this class for a FiniteDuration-typed property */
+  abstract class FiniteDurationProperty extends Property[FiniteDuration] {
     lazy val get = PropertiesExceptions.getFiniteDuration(key)
   }
 
