@@ -2,7 +2,7 @@ name := "omniprop"
 
 organization := "com.joescii"
 
-version := "0.0.1"
+version := "0.1"
 
 scalaVersion := "2.9.3"
 
@@ -17,7 +17,8 @@ libraryDependencies ++= {
 
 scalacOptions <<= scalaVersion map { v: String =>
   val opts = "-deprecation" :: "-unchecked" :: Nil
-  if (v.startsWith("2.9.")) opts else opts ++ ("-feature" :: "-language:postfixOps" :: Nil)
+  if (v.startsWith("2.9.")) opts 
+  else opts ++ ("-feature" :: "-language:postfixOps" :: "-language:implicitConversions" :: Nil)
 }
 
 publishTo <<= version { _.endsWith("SNAPSHOT") match {
