@@ -7,6 +7,7 @@ Problem Statement
 =================
 
 This little project aims to solve the following problems:
+
 1. Different libraries and frameworks have different APIs for doing the same thing. 
 2. These aforementioned APIs have differing opinions on how to handle properties (exceptions vs `Option[String]`).
 3. Properties are a `Map[String, String]`, and hence inherently type-unsafe.
@@ -39,6 +40,7 @@ Usage
 =====
 
 To use the **omniprop** DSL in your Scala application, you will need to do the following:
+
 1. Import `com.joescii.omniprop._`
 2. Define an `object` which extends the appropriately-typed sub trait of `Property[T]`
 3. On the property object, either explicitly call `get` or implicitly convert to the value type
@@ -70,10 +72,12 @@ TODO
 ====
 
 I have these features planned for version 1.0
+
 1. Support configuring `PropertyProvider` stack.
 2. Support Lift `Props`.
 3. Support Typesafe `config`.
 4. Support default values for `Property[T]` objects.
 
 Maybe one day
+
 1. Configure whether the property should be read each time (i.e. `def`) or read once (i.e. `lazy val`).  Current behavior is the latter.
