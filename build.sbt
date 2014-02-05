@@ -56,3 +56,7 @@ pomExtra := (
             </developer>
          </developers>
  )
+
+ parallelExecution in test := false
+ 
+ 

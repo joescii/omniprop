@@ -50,19 +50,15 @@ package object omniprop {
 
   /** Gets properties by name from the configured stack of PropertyProviders, throwing an exception for undefined properties */
   object PropertiesExceptions {
-    import omniprop.providers.{ PropertyProvider, System => Sys }
-
-    /** The stack of PropertyProviders to use for resolving property values.  */
-    // TODO: Make this configurable, perhaps utilizing a Promise to allow it to be settable (once) and immutable
-    private val providers:List[PropertyProvider] = List(Sys)
-
     /** Gets the property value from the stack of PropertyProviders */
-    def get(key:String):String =
+    def get(key:String):String = {
     // TODO: Map over the providers to resolve the property
-      providers.head.get(key) match {
+      if(providers.PropertyProviders.stack.isEmpty) throw InvalidConfigurationException("Property '"+key+"' was accessed prior to invoking PropertyProviders.configure")
+      else providers.PropertyProviders.stack.head.get(key) match {
         case Some(v) => v
         case _ => throw UnresolvedPropertyException(key)
       }
+    }
 
     /** Gets a property and converts the value to an integer */
     def getInt(key:String):Int = {
@@ -90,6 +86,8 @@ package object omniprop {
   case class UnresolvedPropertyException(key:String) extends Exception(key)
   /** Thrown when the requested property had a defined value which could not be converted to the expected type */
   case class WrongValueTypeException(key:String, value:String) extends Exception(key+" == '"+value+"'")
+  /** Throw when an invalid configuration is attempted, or if a property is accessed prior to setting a valid configuration */
+  case class InvalidConfigurationException(msg:String) extends Exception(msg)
 
   implicit def ConvertString(p:StringProperty):String = p.get
   implicit def ConvertInt(p:IntProperty):Int = p.get

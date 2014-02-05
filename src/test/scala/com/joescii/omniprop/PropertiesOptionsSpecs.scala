@@ -4,6 +4,8 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 object PropertiesOptionsChecks extends Properties("PropertiesOption") {
+  providers.PropertyProviders.stack = List(providers.SystemPropertyProvider)
+  
   object test extends StringProperty
 
   def undef(k:String) = test.key+"."+k

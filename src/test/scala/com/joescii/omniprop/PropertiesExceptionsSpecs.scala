@@ -3,11 +3,12 @@ package com.joescii.omniprop
 import org.scalacheck._
 import Prop._
 import Arbitrary._
-import Gen._
 
 import scala.concurrent.duration._
 
 object PropertiesExceptionsChecks extends Properties("PropertiesExceptions") {
+  providers.PropertyProviders.stack = List(providers.SystemPropertyProvider)
+
   object test extends StringProperty
 
   def undef(k:String) = test.key+"."+k

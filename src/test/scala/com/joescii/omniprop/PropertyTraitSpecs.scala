@@ -13,6 +13,11 @@ object Test {
 }
 
 class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
+  override def beforeAll = {
+    import providers._
+    PropertyProviders.stack = List(SystemPropertyProvider)
+  }
+
   override def afterAll = {
     System.clearProperty(Test.string.key)
     System.clearProperty(Test.int.key)
