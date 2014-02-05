@@ -52,9 +52,9 @@ package object omniprop {
   object PropertiesExceptions {
     /** Gets the property value from the stack of PropertyProviders */
     def get(key:String):String = {
-    // TODO: Map over the providers to resolve the property
       if(providers.PropertyProviders.stack.isEmpty) throw InvalidConfigurationException("Property '"+key+"' was accessed prior to invoking PropertyProviders.configure")
-      else providers.PropertyProviders.stack.head.get(key) match {
+      val vals = providers.PropertyProviders.stack.flatMap(_.get(key))
+      vals.headOption match {
         case Some(v) => v
         case _ => throw UnresolvedPropertyException(key)
       }

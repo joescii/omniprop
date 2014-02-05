@@ -25,5 +25,13 @@ object PropertyProviders {
 object SystemPropertyProvider extends PropertyProvider {
   private val props = new scala.sys.SystemProperties()
 
-  def get(key:String) = props.get(key)
+  def get(key:String) = props get key
+}
+
+object MapPropertyProvider {
+  def apply(entry:(String,String)*):MapPropertyProvider = MapPropertyProvider((entry).toMap)
+}
+/** Provides properties from a Map object.  Primarily for testing purposes */
+case class MapPropertyProvider(m:Map[String, String]) extends PropertyProvider {
+  def get(key:String) = m get key
 }
