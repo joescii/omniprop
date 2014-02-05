@@ -6,11 +6,13 @@ trait PropertyProvider {
   def get(key:String):Option[String]
 }
 
+/** Configuration object for setting up the stack of PropertyProviders */
 object PropertyProviders {
   self =>
 
   private[omniprop] var stack:List[PropertyProvider] = List()
 
+  /** Configures the stack of PropertyProvider for omniprop to utilize. */
   def configure(stack:List[PropertyProvider]) = {
     if(stack.isEmpty)       throw InvalidConfigurationException("PropertyProviders.configure must be invoked with a non-empty list")
     if(!self.stack.isEmpty) throw InvalidConfigurationException("PropertyProviders.configure must be invoked only once")
