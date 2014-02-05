@@ -20,3 +20,10 @@ object PropertyProviders {
     self.stack = stack
   }
 }
+
+/** Provides properties from the JVM's System properties object */
+object SystemPropertyProvider extends PropertyProvider {
+  private val props = new scala.sys.SystemProperties()
+
+  def get(key:String) = props.get(key)
+}
