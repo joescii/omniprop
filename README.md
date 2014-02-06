@@ -32,7 +32,7 @@ Add **omniprop** as a dependency in your `build.sbt` or `Build.scala` as appropr
 ```scala
 libraryDependencies ++= Seq(
   // Other dependencies ...
-  "com.joescii" %% "omniprop" % "0.1" % "compile"
+  "com.joescii" %% "omniprop" % "0.2" % "compile"
 )
 ```
 
