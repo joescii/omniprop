@@ -4,14 +4,20 @@ organization := "com.joescii"
 
 version := "0.2-SNAPSHOT"
 
-scalaVersion := "2.9.3"
+scalaVersion := "2.10.3"
 
-crossScalaVersions := Seq("2.10.3", "2.9.3")
+crossScalaVersions := Seq("2.10.3")
+
+resolvers ++= Seq(
+  "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
+  "sonatype-releases"  at "http://oss.sonatype.org/content/repositories/releases"
+)
 
 libraryDependencies ++= {
   Seq(
-    "org.scalatest"  %% "scalatest"  % "1.9.1"  % "test",
-    "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+    "net.liftweb"    %% "lift-webkit" % "2.5.1"  % "optional,compile",
+    "org.scalatest"  %% "scalatest"   % "1.9.1"  % "test",
+    "org.scalacheck" %% "scalacheck"  % "1.10.1" % "test"
   )
 }
 
