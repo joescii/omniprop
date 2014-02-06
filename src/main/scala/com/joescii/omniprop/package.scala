@@ -20,6 +20,10 @@ package object omniprop {
     lazy val get = PropertiesExceptions.get(key)
   }
 
+  abstract class BooleanProperty extends Property[Boolean] {
+    lazy val get = PropertiesExceptions.getBoolean(key)
+  }
+
   /** Extend this class for an Int-typed property */
   abstract class IntProperty extends Property[Int] {
     lazy val get = PropertiesExceptions.getInt(key)
@@ -42,7 +46,10 @@ package object omniprop {
     /** Gets the property value from the stack of PropertyProviders */
     def get(key:String):Option[String] = toOption(PropertiesExceptions.get(key))
 
-    /** Gets a property and converts the value to an integer */
+    /** Gets a property and converts the value to a Boolean */
+    def getBoolean(key:String):Option[Boolean] = toOption(PropertiesExceptions.getBoolean(key))
+
+    /** Gets a property and converts the value to an Integer */
     def getInt(key:String):Option[Int] = toOption(PropertiesExceptions.getInt(key))
 
     /** Gets a property and converts the value into a FiniteDuration object */
@@ -61,26 +68,30 @@ package object omniprop {
       }
     }
 
-    /** Gets a property and converts the value to an integer */
-    def getInt(key:String):Int = {
+    private def convertOrExcept[T](key:String, converter:String => T):T = {
       val v = get(key)
       try {
-        Integer.parseInt(v)
-      } catch {
-        case _:NumberFormatException => throw WrongValueTypeException(key, v)
-      }
-    }
-
-    /** Gets a property and converts the value into a FiniteDuration object */
-    def getFiniteDuration(key:String):FiniteDuration = {
-      val v = get(key)
-      try {
-        val split = v.split("""\s+""")
-        FiniteDuration(java.lang.Long.parseLong(split(0)), split(1))
+        converter(v)
       } catch {
         case _:Exception => throw WrongValueTypeException(key, v)
       }
     }
+
+    /** Gets a property and converts the value to a boolean */
+    def getBoolean(key:String):Boolean = convertOrExcept(key, (v) => {
+      if(v == "true") true
+      else if(v == "false") false
+      else throw new Exception()
+    } )
+
+    /** Gets a property and converts the value to an integer */
+    def getInt(key:String):Int = convertOrExcept(key, (v) => Integer.parseInt(v) )
+
+    /** Gets a property and converts the value into a FiniteDuration object */
+    def getFiniteDuration(key:String):FiniteDuration = convertOrExcept(key, (v) => {
+      val split = v.split("""\s+""")
+      FiniteDuration(java.lang.Long.parseLong(split(0)), split(1))
+    } )
   }
 
   /** Thrown when the requested property could not be resolved in the current configuration */
@@ -91,6 +102,7 @@ package object omniprop {
   case class InvalidConfigurationException(msg:String) extends Exception(msg)
 
   implicit def ConvertString(p:StringProperty):String = p.get
+  implicit def ConvertBoolean(p:BooleanProperty):Boolean = p.get
   implicit def ConvertInt(p:IntProperty):Int = p.get
   implicit def ConvertFiniteDuration(p:FiniteDurationProperty):FiniteDuration = p.get
 }

@@ -8,6 +8,7 @@ package object test {
 }
 object Test {
   object string extends StringProperty
+  object boolean extends BooleanProperty
   object int extends IntProperty
   object finiteDuration extends FiniteDurationProperty
 }
@@ -20,6 +21,7 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfte
 
   override def afterAll = {
     System.clearProperty(Test.string.key)
+    System.clearProperty(Test.boolean.key)
     System.clearProperty(Test.int.key)
     System.clearProperty(Test.finiteDuration.key)
   }
@@ -41,6 +43,23 @@ class PropertyTraitSpecs extends WordSpec with ShouldMatchers with BeforeAndAfte
       System.setProperty(Test.string.key, "value")
       val v:String = Test.string
       v should equal ("value")
+    }
+  }
+
+  "BooleanProperty" should {
+    "except for undefined properties" in {
+      intercept[UnresolvedPropertyException](Test.boolean.get)
+    }
+
+    "except for non-boolean properties" in {
+      System.setProperty(Test.boolean.key, "garbage")
+      intercept[WrongValueTypeException](Test.boolean.get)
+    }
+
+    "implicitly convert to a Boolean and equal the defined value" in {
+      System.setProperty(Test.boolean.key, "true")
+      val v1:Boolean = Test.boolean
+      v1 should equal (true)
     }
   }
 

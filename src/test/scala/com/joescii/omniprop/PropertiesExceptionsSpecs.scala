@@ -44,6 +44,30 @@ object PropertiesExceptionsChecks extends Properties("PropertiesExceptions") {
     v == value
   }
 
+  property("getBoolean(undefined value) throws UnresolvedProperty") = forAll { k:String =>
+    throws(classOf[UnresolvedPropertyException])(PropertiesExceptions.getBoolean(undef(k)))
+  }
+
+  property("getBoolean(defined value) == boolean") = forAll { (k:String, v:Boolean) =>
+    val key = undef(k)
+    System.setProperty(key, v.toString)
+    val value = PropertiesExceptions.getBoolean(key)
+    System.clearProperty(key)
+
+    v == value
+  }
+
+  property("getBoolean(non-boolean value) throws WrongValueTypeException") = forAll { (k:String, v:String) =>
+    val key = undef(k)
+    System.setProperty(key, v)
+
+    val check:Boolean = (v == "false") || (v == "true") || throws(classOf[WrongValueTypeException])(PropertiesExceptions.getBoolean(key))
+
+    System.clearProperty(key)
+
+    check
+  }
+
   property("getInt(undefined value) throws UnresolvedProperty") = forAll { k:String =>
     throws(classOf[UnresolvedPropertyException])(PropertiesExceptions.getInt(undef(k)))
   }
