@@ -13,11 +13,11 @@ object PropertyProviders {
   private[omniprop] var stack:List[PropertyProvider] = List()
 
   /** Configures the stack of PropertyProvider for omniprop to utilize. */
-  def configure(stack:List[PropertyProvider]) = {
+  def configure(stack:PropertyProvider*) = {
     if(stack.isEmpty)       throw InvalidConfigurationException("PropertyProviders.configure must be invoked with a non-empty list")
     if(!self.stack.isEmpty) throw InvalidConfigurationException("PropertyProviders.configure must be invoked only once")
 
-    self.stack = stack
+    self.stack = stack.toList
   }
 }
 

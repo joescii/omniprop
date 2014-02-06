@@ -15,12 +15,12 @@ class PropertyProviderSpecs extends WordSpec with ShouldMatchers with BeforeAndA
     }
 
     "throw an exception if configure invoked with an empty List" in {
-      intercept[InvalidConfigurationException](PropertyProviders.configure(List()))
+      intercept[InvalidConfigurationException](PropertyProviders.configure())
     }
 
     "throw an exception on the second call to configure" in {
-      PropertyProviders.configure(List(SystemPropertyProvider))
-      intercept[InvalidConfigurationException](PropertyProviders.configure(List(SystemPropertyProvider)))
+      PropertyProviders.configure(SystemPropertyProvider)
+      intercept[InvalidConfigurationException](PropertyProviders.configure(SystemPropertyProvider))
     }
   }
 }
