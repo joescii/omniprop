@@ -36,6 +36,11 @@ libraryDependencies ++= Seq(
 )
 ```
 
+Scala Versions
+==============
+
+Unfortunately, only one Scala version is supported, namely 2.10 (2.10.3 in particular).  This library includes a `FiniteDurationProperty` for resolving properties of type `scala.concurrent.duration.FiniteDuration` which is only available in 2.9.3 and 2.10.x.  Then 2.9.3 is eliminated by the optional dependency on Lift 2.5 which is not currently compiled against 2.9.3.
+
 Usage
 =====
 
@@ -45,6 +50,11 @@ To use the **omniprop** DSL in your Scala application, you will need to do the f
 2. Import `com.joescii.omniprop._`
 3. Define an `object` which extends the appropriately-typed sub class of `Property[T]`
 4. On the property object, either explicitly call `get` or implicitly convert to the value type
+
+Exception Handling
+==================
+
+By design, you should never catch any of the exceptions thrown by **omniprop**.  They are informing you that your application is misconfigured and attempt to provide a hint for what is wrong.  An exception to this rule (no pun intended), is your test code.  Because `PropertyProviders.configure` should be invoked only once (to prevent clobbering, race conditions, and other mistakes) and test are run out of order by design, I find it necessary to wrap the call to `configure` in a `scala.util.Try` and have every test suite invoke the configuration before the tests run.
 
 Examples
 ========
