@@ -41,12 +41,33 @@ Usage
 
 To use the **omniprop** DSL in your Scala application, you will need to do the following:
 
-1. Import `com.joescii.omniprop._`
-2. Define an `object` which extends the appropriately-typed sub class of `Property[T]`
-3. On the property object, either explicitly call `get` or implicitly convert to the value type
+1. Configure which property providers are to be utilized by calling `com.joescii.omniprop.providers.PropertyProviders.configure(/* ... */)`.  This must be done before any properties are read, so place it in your application bootstrap.
+2. Import `com.joescii.omniprop._`
+3. Define an `object` which extends the appropriately-typed sub class of `Property[T]`
+4. On the property object, either explicitly call `get` or implicitly convert to the value type
 
 Examples
 ========
+
+Configuration for Lift
+
+```scala
+package bootstrap.liftweb
+
+class Boot {
+  def boot {
+    import com.joescii.omniprop.providers._
+    PropertyProviders.configure(
+      SystemPropertyProvider, // First check SystemProperties
+      LiftPropsProvider       // If not found there, check Lift's Props
+    )
+    
+    // ...
+  }
+}
+```
+
+Define properties and use them
 
 ```scala
 package org.example
@@ -73,10 +94,8 @@ TODO
 
 I have these features planned for version 1.0
 
-1. Support configuring `PropertyProvider` stack.
-2. Support Lift `Props`.
-3. Support Typesafe `config`.
-4. Support default values for `Property[T]` objects.
+1. Support default values for `Property[T]` objects.
+2. Support Typesafe `config`.
 
 Maybe one day
 
