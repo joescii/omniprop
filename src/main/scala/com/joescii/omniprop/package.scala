@@ -35,6 +35,7 @@ package object omniprop {
     private def toOption[T](getter: => T) = try {
       Some(getter)
     } catch {
+      case e:InvalidConfigurationException => throw e
       case _:Exception => None
     }
 
