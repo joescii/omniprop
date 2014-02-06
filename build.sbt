@@ -6,7 +6,10 @@ version := "0.3-SNAPSHOT"
 
 scalaVersion := "2.10.3"
 
-crossScalaVersions := Seq("2.10.3")
+// Ideally, would support 2.9.1 and up.
+// Lowest supportable version is 2.9.3 due to FiniteDurationProperty
+// But, can't support 2.9.3 with Lift 2.5.1 due to LiftPropProvider
+// crossScalaVersions := Seq("2.10.3")
 
 resolvers ++= Seq(
   "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
