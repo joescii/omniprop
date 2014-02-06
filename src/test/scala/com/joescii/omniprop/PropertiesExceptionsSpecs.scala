@@ -121,5 +121,17 @@ class PropertiesExceptionsSpecs extends WordSpec with ShouldMatchers with Before
 
       PropertiesExceptions.get(key) should equal ("Second")
     }
+
+    "not read beyond the first property provider which resolves the requested property" in {
+      PropertyProviders.stack = List(
+        MapPropertyProvider(),
+        MapPropertyProvider(key -> "Second"),
+        new PropertyProvider {
+          override def get(key: String): Option[String] = throw new java.lang.Exception("Can't touch this!!")
+        }
+      )
+
+      PropertiesExceptions.get(key) should equal ("Second")
+    }
   }
 }
