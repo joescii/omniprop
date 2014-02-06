@@ -94,3 +94,32 @@ object PropertiesExceptionsChecks extends Properties("PropertiesExceptions") {
     check
   }
 }
+
+import org.scalatest._
+import matchers.ShouldMatchers
+
+class PropertiesExceptionsSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
+  import providers._
+
+  "PropertiesExceptions" should {
+    val key = "com.joescii.omniprop.providers.test"
+
+    "prefer the property value given by an earlier entry in the stack" in {
+      PropertyProviders.stack = List(
+        MapPropertyProvider(key -> "First"),
+        MapPropertyProvider(key -> "Second")
+      )
+
+      PropertiesExceptions.get(key) should equal ("First")
+    }
+
+    "resolve a property from the second Provider in a stack if the first does not provide a value" in {
+      PropertyProviders.stack = List(
+        MapPropertyProvider(),
+        MapPropertyProvider(key -> "Second")
+      )
+
+      PropertiesExceptions.get(key) should equal ("Second")
+    }
+  }
+}
