@@ -1,0 +1,5 @@
+#scala
+
+* Added support for [@liftweb][1] properties
+
+[1]: http://liftweb.net

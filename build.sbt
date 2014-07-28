@@ -2,7 +2,9 @@ name := "omniprop"
 
 organization := "com.joescii"
 
-version := "0.3-SNAPSHOT"
+homepage := Some(url("https://github.com/joescii/omniprop"))
+
+version := "0.2"
 
 scalaVersion := "2.10.3"
 
@@ -45,27 +47,31 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra := (
-        <url>https://github.com/barnesjd/omniprop</url>
-        <licenses>
-            <license>
-              <name>Apache 2.0 License</name>
-              <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-              <distribution>repo</distribution>
-            </license>
-         </licenses>
          <scm>
-            <url>git@github.com:barnesjd/omniprop.git</url>
-            <connection>scm:git:git@github.com:barnesjd/omniprop.git</connection>
+            <url>git@github.com:joescii/omniprop.git</url>
+            <connection>scm:git:git@github.com:joescii/omniprop.git</connection>
          </scm>
          <developers>
             <developer>
-              <id>barnesjd</id>
+              <id>joescii</id>
               <name>Joe Barnes</name>
-              <url>https://github.com/barnesjd</url>
+              <url>https://github.com/joescii</url>
             </developer>
          </developers>
- )
+)
 
- parallelExecution in test := false
+parallelExecution in test := false
  
- 
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+
+seq(lsSettings :_*)
+
+(LsKeys.tags in LsKeys.lsync) := Seq("properties", "reflection")
+
+(description in LsKeys.lsync) := "Scala DSL for unifying JVM property libraries in a type-safe manner"
+
+(LsKeys.ghUser in LsKeys.lsync) := Some("joescii")
+
+(LsKeys.ghRepo in LsKeys.lsync) := Some("omniprop")
+
+(LsKeys.ghBranch in LsKeys.lsync) := Some("master")
