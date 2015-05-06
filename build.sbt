@@ -6,12 +6,12 @@ homepage := Some(url("https://github.com/joescii/omniprop"))
 
 version := "0.2"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.4"
 
 // Ideally, would support 2.9.1 and up.
 // Lowest supportable version is 2.9.3 due to FiniteDurationProperty
 // But, can't support 2.9.3 with Lift 2.5.1 due to LiftPropProvider
-// crossScalaVersions := Seq("2.10.3")
+crossScalaVersions := Seq("2.10.5", "2.11.4")
 
 resolvers ++= Seq(
   "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
@@ -20,9 +20,9 @@ resolvers ++= Seq(
 
 libraryDependencies ++= {
   Seq(
-    "net.liftweb"    %% "lift-webkit" % "2.5.1"  % "optional,compile",
-    "org.scalatest"  %% "scalatest"   % "1.9.1"  % "test",
-    "org.scalacheck" %% "scalacheck"  % "1.10.1" % "test"
+    "net.liftweb"    %% "lift-webkit" % "2.6.2"  % "optional,compile",
+    "org.scalatest"  %% "scalatest"   % "2.2.4"  % "test",
+    "org.scalacheck" %% "scalacheck"  % "1.12.2" % "test"
   )
 }
 

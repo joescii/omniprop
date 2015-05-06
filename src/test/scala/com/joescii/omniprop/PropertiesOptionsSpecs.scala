@@ -27,7 +27,6 @@ object PropertiesOptionsChecks extends Properties("PropertiesOption") {
 }
 
 import org.scalatest._
-import matchers.ShouldMatchers
 
 class PropertiesOptionsSpecs extends WordSpec with ShouldMatchers {
   "PropertiesOptions" should {

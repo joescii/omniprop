@@ -1,7 +1,6 @@
 package com.joescii.omniprop
 
 import org.scalatest._
-import org.scalatest.matchers._
 
 package object test {
   object property extends StringProperty

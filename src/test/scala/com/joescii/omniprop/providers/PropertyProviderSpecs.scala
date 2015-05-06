@@ -2,7 +2,6 @@ package com.joescii.omniprop
 package providers
 
 import org.scalatest._
-import matchers._
 
 class PropertyProviderSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
   override def beforeAll = {

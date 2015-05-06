@@ -120,7 +120,6 @@ object PropertiesExceptionsChecks extends Properties("PropertiesExceptions") {
 }
 
 import org.scalatest._
-import matchers.ShouldMatchers
 
 class PropertiesExceptionsSpecs extends WordSpec with ShouldMatchers with BeforeAndAfterAll {
   import providers._
